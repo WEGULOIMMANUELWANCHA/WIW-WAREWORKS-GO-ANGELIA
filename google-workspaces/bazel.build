@@ -1,1 +1,106 @@
+# bazel/BUILD
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@rules_cc//cc:repositories.bzl", "rules_cc_dependencies")
+load("@io_bazel_rules_docker//java:image.bzl", "container_image")
+load("@io_bazel_rules_nodejs//:defs.bzl", "node_repositories", "node_binary", "node_test")
+load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_register_toolchains", "kt_jvm_binary", "kt_test")
+load("@rules_python//python:defs.bzl", "py_binary", "py_test")
+
+# External dependencies (example)
+http_archive(
+    name = "external_code",
+    urls = ["https://example.com/external_code_v1.tar.gz"],
+    strip_prefix = "external_code_v1",
+)
+
+local_repository(
+    name = "external_code_repo",
+    path = "@external_code",
+)
+
+# Load C++ dependencies (adjust as needed)
+rules_cc_dependencies()
+
+# Node.js repositories
+node_repositories()
+
+# Kotlin repositories
+kt_register_toolchains()
+
+# Loop through repositories and build
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+repositories_file = "repository_list.txt"
+
+with open(repositories_file, "r") as f:
+    repositories = f.read().splitlines()
+
+for repo in repositories:
+    git_repository(
+        name = repo,
+        remote = repo,
+    )
+
+    # Add your build targets for each repository
+    py_binary(
+        name = "py_app_" + repo,
+        srcs = [repo + "/path/to/py_app.py"],
+    )
+
+    node_binary(
+        name = "node_app_" + repo,
+        entry_point = repo + "/path/to/js_app.js",
+    )
+
+    js_binary(
+        name = "js_app_" + repo,
+        srcs = glob([repo + "/path/to/**/*.js"]),
+    )
+
+    ts_binary(
+        name = "ts_app_" + repo,
+        srcs = glob([repo + "/path/to/**/*.ts"]),
+    )
+
+    genrule(
+        name = "html_app_" + repo,
+        srcs = [repo + "/path/to/**/*.html"],
+        cmd = "cp $< $@",
+        outs = ["html_app.html"],
+    )
+
+    # ... (add targets for other languages)
+
+# Generic build targets without specifying paths
+# Add generic targets for each language using glob and path/to/**/*
+js_binary(
+    name = "js_app_generic",
+    srcs = glob(["path/to/**/*.js"]),
+)
+
+ts_binary(
+    name = "ts_app_generic",
+    srcs = glob(["path/to/**/*.ts"]),
+)
+
+genrule(
+    name = "html_app_generic",
+    srcs = glob(["path/to/**/*.html"]),
+    cmd = "cp $< $@",
+    outs = ["html_app.html"],
+)
+
+# ... (add generic targets for other languages)
+
+# Docker target (if needed)
+container_image(
+    name = "docker_image_generic",
+    base = "@debian//image",
+    cmd = ["//path/to:java_app"],
+    deps = [
+        ":java_app",
+        ":cpp_library",
+    ],
+)
 
