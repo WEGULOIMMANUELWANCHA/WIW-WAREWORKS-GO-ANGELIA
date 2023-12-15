@@ -1,0 +1,114 @@
+name: Build Binaries 
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Bazel
+        run: |
+          sudo apt update
+          sudo apt install -y apt-transport-https curl gnupg
+          curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor -o /usr/share/keyrings/bazel-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/bazel-archive-keyring.gpg] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+          sudo apt update
+          sudo apt install -y bazel
+          bazel version
+        shell: bash
+
+      - name: Run Go script to fetch repositories
+        run: |
+          package main
+
+          import (
+            "bufio"
+            "fmt"
+            "os"
+            "os/exec"
+            "strings"
+          )
+
+          func main() {
+            // Open github-repositories/repositories.txt file
+            file, err := os.Open("github-repositories/repositories.txt")
+            if err != nil {
+              fmt.Println("Error opening file:", err)
+              os.Exit(1)
+            }
+            defer file.Close()
+
+            scanner := bufio.NewScanner(file)
+
+            // Iterate through each line of the file
+            for scanner.Scan() {
+              repositoryURL := strings.TrimSpace(scanner.Text()) // Trim spaces and newline characters
+
+              // Display or use the repository URL
+              fmt.Println("Repository URL:", repositoryURL)
+
+              // Git clone each URL to the working directory
+              cmd := exec.Command("git", "clone", repositoryURL)
+              cmd.Stdout = os.Stdout
+              cmd.Stderr = os.Stderr
+              err := cmd.Run()
+              if err != nil {
+                fmt.Println("Error cloning repository:", err)
+                // Handle the error or continue with the next URL
+              }
+            }
+
+            if err := scanner.Err(); err != nil {
+              fmt.Println("Error reading file:", err)
+              os.Exit(1)
+            }
+          }
+
+      - name: Build Binaries 
+        run: |
+          # Loop through the repository list file and perform actions for each repository
+          while IFS= read -r repo; do
+            repo_name=$(basename "$repo" .git)
+            cd "$repo_name" || continue  # Continue to the next repository if CD fails
+            
+            # Build binaries using Bazel or any other necessary commands
+            bazel build //...  # Adjust this command according to your specific build targets
+            
+            # Error handling and debugging
+            if [ $? -ne 0 ]; then
+              echo "Error building $repo_name"
+              # Add more error handling or debugging steps as needed
+            fi
+            
+            cd ..
+            rm -rf "$repo_name"
+          done < github-repositories/repositories.txt
+        shell: bash
+
+      - name: Bazel Test
+        run: |
+          # Run Bazel tests for the built binaries or any specific tests
+          bazel test //...  # Adjust this command according to your specific test targets
+          
+          # Error handling and debugging
+          if [ $? -ne 0 ]; then
+            echo "Bazel test failed"
+            # Add more error handling or debugging steps as needed
+          fi
+        shell: bash
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_dir: ./github-pages/pages.md # Path to publish directory for GitHub Pages
+
+      - name: Store Artifacts as Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./github-release/artifacts@v1.0.0 # Path to artifacts for GitHub Release
