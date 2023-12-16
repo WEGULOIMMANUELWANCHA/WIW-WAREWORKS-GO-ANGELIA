@@ -22,10 +22,10 @@ jobs:
           bazel version
         shell: bash
 
-      - name: Run Go script to fetch repositories
+      - name: Run Go script
         run: |
-          package main
-
+          echo 'package main
+          
           import (
             "bufio"
             "fmt"
@@ -33,56 +33,48 @@ jobs:
             "os/exec"
             "strings"
           )
-
+          
           func main() {
-            // Open github-repositories/repositories.txt file
             file, err := os.Open("github-repositories/repositories.txt")
             if err != nil {
               fmt.Println("Error opening file:", err)
               os.Exit(1)
             }
             defer file.Close()
-
+          
             scanner := bufio.NewScanner(file)
-
-            // Iterate through each line of the file
+          
             for scanner.Scan() {
-              repositoryURL := strings.TrimSpace(scanner.Text()) // Trim spaces and newline characters
-
-              // Display or use the repository URL
+              repositoryURL := strings.TrimSpace(scanner.Text())
+          
               fmt.Println("Repository URL:", repositoryURL)
-
-              // Git clone each URL to the working directory
+          
               cmd := exec.Command("git", "clone", repositoryURL)
               cmd.Stdout = os.Stdout
               cmd.Stderr = os.Stderr
               err := cmd.Run()
               if err != nil {
                 fmt.Println("Error cloning repository:", err)
-                // Handle the error or continue with the next URL
               }
             }
-
+          
             if err := scanner.Err(); err != nil {
               fmt.Println("Error reading file:", err)
               os.Exit(1)
             }
-          }
+          }' > script.go
+          go run script.go
 
       - name: Build Binaries 
         run: |
-          # Loop through the repository list file and perform actions for each repository
           while IFS= read -r repo; do
             repo_name=$(basename "$repo" .git)
-            cd "$repo_name" || continue  # Continue to the next repository if CD fails
+            cd "$repo_name" || continue
             
-            # Build binaries using Bazel or any other necessary commands
-            bazel build //...  # Adjust this command according to your specific build targets
+            bazel build //...
             
-            # Error handling and debugging
             if [ $? -ne 0 ]; then
               echo "Error building $repo_name"
-              # Add more error handling or debugging steps as needed
             fi
             
             cd ..
@@ -92,23 +84,21 @@ jobs:
 
       - name: Bazel Test
         run: |
-          # Run Bazel tests for the built binaries or any specific tests
-          bazel test //...  # Adjust this command according to your specific test targets
+          bazel test //...
           
-          # Error handling and debugging
           if [ $? -ne 0 ]; then
             echo "Bazel test failed"
-            # Add more error handling or debugging steps as needed
           fi
         shell: bash
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          publish_dir: ./github-pages/pages.md # Path to publish directory for GitHub Pages
+          publish_dir: ./github-pages/pages.md
 
       - name: Store Artifacts as Release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          files: ./github-release/artifacts@v1.0.0 # Path to artifacts for GitHub Release
+          files: ./github-release/artifacts@v1.0.0
+
