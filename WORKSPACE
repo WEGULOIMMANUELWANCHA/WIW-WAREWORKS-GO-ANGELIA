@@ -34,31 +34,6 @@ http_archive(
     strip_prefix = "rules_python-0.5.0",  # Adjust the prefix according to the version downloaded
 )
 
-# Add other toolchains and rules as needed following a similar pattern
-name: WIW-WAREWORKS-GO-ANGELIA
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build_binaries:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Set up Bazel
-        run: |
-          # Download and install Bazel
-          wget -O install.sh "https://github.com/bazelbuild/bazel/releases/latest/download/bazel-<VERSION>-installer-linux-x86_64.sh"  # Replace <VERSION> with the latest version
-          chmod +x install.sh
-          ./install.sh --user
-          export PATH="$HOME/bin:$PATH"
-          bazel version
-
       - name: Configure Bazel workspace
         run: |
           cat <<EOF > WORKSPACE
