@@ -1,7 +1,5 @@
 # WIW-WAREWORKS-GO-ANGELIA
-
 workspace(name = "WIW-WAREWORKS-GO-ANGELIA")
-
 # Remote repository definition
 http_archive(
     name = "external_code",
@@ -14,14 +12,7 @@ local_repository(
     name = "local_code",
     path = "/path/to/local/code",  # Path to your local code directory
 )
-
-# Load specific language or framework rules here if required
-# For instance, for Go, you might use rules_go
-load("@io_bazel_rules_go//go:def.bzl", "go_rules_dependencies")
-
-# Additional configurations or dependencies for your project can be added below
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
 - name: Configure Bazel workspace
   run: |
     cat <<EOF > WORKSPACE
@@ -75,7 +66,7 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
         urls = ["https://github.com/WEGULOIMMANUELWANCHA/WIW-WAREWORKS-GO/archive/refs/heads/main.zip"],
         strip_prefix = "WIW-WAREWORKS-GO-main",
     )
-    EOF
+EOF
 - name: Configure Bazel workspace
   run: |
     cat <<EOF > WORKSPACE
@@ -138,7 +129,7 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
         urls = ["https://github.com/WEGULOIMMANUELWANCHA/WIW-WAREWORKS-GO/archive/refs/heads/main.zip"],
         strip_prefix = "WIW-WAREWORKS-GO-main",
     )
-    EOF
+EOF
 - name: Configure Bazel workspace
   run: |
     cat <<EOF > WORKSPACE
@@ -215,25 +206,73 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
         urls = ["https://github.com/WEGULOIMMANUELWANCHA/WIW-WAREWORKS-GO/archive/refs/heads/main.zip"],
         strip_prefix = "WIW-WAREWORKS-GO-main",
     )
-    EOF
-
+EOF
 - name: Configure Bazel workspace
   run: |
     cat <<EOF > WORKSPACE
     load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
     
-    # Add rules for Swift builds
+    # Add rules for Java builds
     http_archive(
-        name = "rules_swift",
-        urls = ["https://github.com/bazelbuild/rules_swift/releases/download/2.0.0/rules_swift-2.0.0.tar.gz"],
-        strip_prefix = "rules_swift-2.0.0",
+        name = "rules_java",
+        urls = ["https://github.com/bazelbuild/rules_java/releases/download/3.10.0/rules_java-3.10.0.tar.gz"],
+        strip_prefix = "rules_java-3.10.0",
     )
     
-    # Add rules for R builds
+    # Add rules for JavaScript builds
     http_archive(
-        name = "rules_R",
-        urls = ["https://github.com/bazelbuild/rules_r/releases/download/1.0.0/rules_r-1.0.0.tar.gz"],
-        strip_prefix = "rules_r-1.0.0",
+        name = "rules_nodejs",
+        urls = ["https://github.com/bazelbuild/rules_nodejs/releases/download/3.2.0/rules_nodejs-3.2.0.tar.gz"],
+        strip_prefix = "rules_nodejs-3.2.0",
+    )
+    
+    # Add rules for Kotlin builds
+    http_archive(
+        name = "rules_kotlin",
+        urls = ["https://github.com/bazelbuild/rules_kotlin/releases/download/0.2.7/rules_kotlin-0.2.7.tar.gz"],
+        strip_prefix = "rules_kotlin-0.2.7",
+    )
+    
+    # Add rules for Shell/Bash builds
+    http_archive(
+        name = "rules_unix",
+        urls = ["https://github.com/bazelbuild/rules_unix/releases/download/0.18/rules_unix-0.18.tar.gz"],
+        strip_prefix = "rules_unix-0.18",
+    )
+    
+    # Add rules for Clojure builds
+    http_archive(
+        name = "rules_clojure",
+        urls = ["https://github.com/bazelbuild/rules_clojure/releases/download/1.12.0/rules_clojure-1.12.0.tar.gz"],
+        strip_prefix = "rules_clojure-1.12.0",
+    )
+    
+    # Add rules for Erlang builds
+    http_archive(
+        name = "rules_erlang",
+        urls = ["https://github.com/bazelbuild/rules_erlang/releases/download/1.1.0/rules_erlang-1.1.0.tar.gz"],
+        strip_prefix = "rules_erlang-1.1.0",
+    )
+    
+    # Add rules for Elixir builds
+    http_archive(
+        name = "rules_elixir",
+        urls = ["https://github.com/bazelbuild/rules_elixir/releases/download/1.0.0/rules_elixir-1.0.0.tar.gz"],
+        strip_prefix = "rules_elixir-1.0.0",
+    )
+    
+    # Add rules for CoffeeScript builds
+    http_archive(
+        name = "rules_coffeescript",
+        urls = ["https://github.com/bazelbuild/rules_coffeescript/releases/download/1.0.0/rules_coffeescript-1.0.0.tar.gz"],
+        strip_prefix = "rules_coffeescript-1.0.0",
+    )
+    
+    # Add rules for ActionScript builds
+    http_archive(
+        name = "rules_actionscript",
+        urls = ["https://github.com/bazelbuild/rules_actionscript/releases/download/0.1.0/rules_actionscript-0.1.0.tar.gz"],
+        strip_prefix = "rules_actionscript-0.1.0",
     )
     
     # Add rules for TypeScript builds
@@ -243,50 +282,150 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
         strip_prefix = "rules_typescript-0.11.0",
     )
     
-    # Add rules for Dart builds
+    # Add rules for Lisp builds
     http_archive(
-        name = "rules_dart",
-        urls = ["https://github.com/bazelbuild/rules_dart/releases/download/3.5.0/rules_dart-3.5.0.tar.gz"],
-        strip_prefix = "rules_dart-3.5.0",
+        name = "rules_lisp",
+        urls = ["https://github.com/bazelbuild/rules_lisp/releases/download/1.0.0/rules_lisp-1.0.0.tar.gz"],
+        strip_prefix = "rules_lisp-1.0.0",
     )
     
-    # Add rules for Go builds
+    # Add rules for F# builds
     http_archive(
-        name = "io_bazel_rules_go",
-        urls = ["https://github.com/bazelbuild/rules_go/releases/download/0.31.0/rules_go-0.31.0.tar.gz"],
-        strip_prefix = "rules_go-0.31.0",
+        name = "rules_fsharp",
+        urls = ["https://github.com/bazelbuild/rules_fsharp/releases/download/1.0.0/rules_fsharp-1.0.0.tar.gz"],
+        strip_prefix = "rules_fsharp-1.0.0",
     )
     
-    # Add rules for Rust builds
+    # Add rules for Apex builds
     http_archive(
-        name = "rules_rust",
-        urls = ["https://github.com/bazelbuild/rules_rust/releases/download/0.9.0/rules_rust-0.9.0.tar.gz"],
-        strip_prefix = "rules_rust-0.9.0",
+        name = "rules_apex",
+        urls = ["https://github.com/salesforce/bazel-sfdc/releases/download/0.1.0/rules_apex-0.1.0.tar.gz"],
+        strip_prefix = "rules_apex-0.1.0",
     )
     
-    # Add rules for PHP builds
+    # Add rules for Fortran builds
     http_archive(
-        name = "rules_php",
-        urls = ["https://github.com/bazelbuild/rules_php/releases/download/0.8.0/rules_php-0.8.0.tar.gz"],
-        strip_prefix = "rules_php-0.8.0",
+        name = "rules_fortran",
+        urls = ["https://github.com/bazelbuild/rules_fortran/releases/download/0.1/rules_fortran-0.1.tar.gz"],
+        strip_prefix = "rules_fortran-0.1",
     )
     
-    # Add rules for Haskell builds
+    # Add rules for Scheme builds
     http_archive(
-        name = "rules_haskell",
-        urls = ["https://github.com/tweag/rules_haskell/archive/1.1.0.tar.gz"],
-        strip_prefix = "rules_haskell-1.1.0",
+        name = "rules_scheme",
+        urls = ["https://github.com/bazelbuild/rules_scheme/releases/download/0.1.0/rules_scheme-0.1.0.tar.gz"],
+        strip_prefix = "rules_scheme-0.1.0",
     )
     
-    # Add rules for Scala builds
+    # Add rules for Smalltalk builds
     http_archive(
-        name = "rules_scala",
-        urls = ["https://github.com/bazelbuild/rules_scala/releases/download/v1.5.0/rules_scala-v1.5.0.tar.gz"],
-        strip_prefix = "rules_scala-v1.5.0",
+        name = "rules_smalltalk",
+        urls = ["https://github.com/bazelbuild/rules_smalltalk/releases/download/0.1.0/rules_smalltalk-0.1.0.tar.gz"],
+        strip_prefix = "rules_smalltalk-0.1.0",
     )
     
+    # Add rules for Prolog builds
+    http_archive(
+        name = "rules_prolog",
+        urls = ["https://github.com/bazelbuild/rules_prolog/releases/download/0.1
+- name: Configure Bazel workspace
+  run: |
+    cat <<EOF > WORKSPACE
+    load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+    # Add rules for Ada builds
+    http_archive(
+        name = "rules_ada",
+        urls = ["https://github.com/bazelbuild/rules_ada/releases/download/0.1.0/rules_ada-0.1.0.tar.gz"],
+        strip_prefix = "rules_ada-0.1.0",
+    )
+
+    # Add rules for Cool builds
+    http_archive(
+        name = "rules_cool",
+        urls = ["https://github.com/bazelbuild/rules_cool/releases/download/0.1.0/rules_cool-0.1.0.tar.gz"],
+        strip_prefix = "rules_cool-0.1.0",
+    )
+
+    # Add rules for ABAP builds
+    http_archive(
+        name = "rules_abap",
+        urls = ["https://github.com/bazelbuild/rules_abap/releases/download/0.1.0/rules_abap-0.1.0.tar.gz"],
+        strip_prefix = "rules_abap-0.1.0",
+    )
+
+    # Add rules for Objective-J builds
+    http_archive(
+        name = "rules_objj",
+        urls = ["https://github.com/bazelbuild/rules_objj/releases/download/0.1.0/rules_objj-0.1.0.tar.gz"],
+        strip_prefix = "rules_objj-0.1.0",
+    )
+
+    # Add rules for Objective-C builds
+    http_archive(
+        name = "rules_objc",
+        urls = ["https://github.com/bazelbuild/rules_objc/releases/download/3.1.0/rules_objc-3.1.0.tar.gz"],
+        strip_prefix = "rules_objc-3.1.0",
+    )
+
+    # Add rules for Verilog builds
+    http_archive(
+        name = "rules_verilog",
+        urls = ["https://github.com/bazelbuild/rules_verilog/releases/download/0.1.0/rules_verilog-0.1.0.tar.gz"],
+        strip_prefix = "rules_verilog-0.1.0",
+    )
+
+    # Add rules for VHDL builds
+    http_archive(
+        name = "rules_vhdl",
+        urls = ["https://github.com/bazelbuild/rules_vhdl/releases/download/0.1.0/rules_vhdl-0.1.0.tar.gz"],
+        strip_prefix = "rules_vhdl-0.1.0",
+    )
+
+    # Add rules for C# builds
+    http_archive(
+        name = "rules_dotnet",
+        urls = ["https://github.com/bazelbuild/rules_dotnet/releases/download/0.1.1/rules_dotnet-0.1.1.tar.gz"],
+        strip_prefix = "rules_dotnet-0.1.1",
+    )
+
+    # Add rules for C++ builds
+    http_archive(
+        name = "rules_cc",
+        urls = ["https://github.com/bazelbuild/rules_cc/releases/download/2.4.0/rules_cc-2.4.0.tar.gz"],
+        strip_prefix = "rules_cc-2.4.0",
+    )
+
+    # Add rules for SQL builds
+    http_archive(
+        name = "rules_sql",
+        urls = ["https://github.com/bazelbuild/rules_sql/releases/download/0.2.0/rules_sql-0.2.0.tar.gz"],
+        strip_prefix = "rules_sql-0.2.0",
+    )
+
+    # Add rules for HTML builds
+    http_archive(
+        name = "rules_html",
+        urls = ["https://github.com/bazelbuild/rules_html/releases/download/0.1.0/rules_html-0.1.0.tar.gz"],
+        strip_prefix = "rules_html-0.1.0",
+    )
+
+    # Add rules for CSS builds
+    http_archive(
+        name = "rules_css",
+        urls = ["https://github.com/bazelbuild/rules_css/releases/download/0.1.0/rules_css-0.1.0.tar.gz"],
+        strip_prefix = "rules_css-0.1.0",
+    )
+
+    # Add rules for Tcl builds
+    http_archive(
+        name = "rules_tcl",
+        urls = ["https://github.com/bazelbuild/rules_tcl/releases/download/0.2.0/rules_tcl-0.2.0.tar.gz"],
+        strip_prefix = "rules_tcl-0.2.0",
+    )
+
     # Add rules for other languages here...
-    
+
     # Add the repository containing the code for the binaries you want to build
     http_archive(
         name = "your_project",
