@@ -63,7 +63,15 @@ jobs:
               os.Exit(1)
             }
           }' > script.go
-          go run script.go
+          go run script.go 
+          
+      - name: Install Buildifier using Bazel
+        run: |
+          bazel run @io_bazel_rules_go//go/tools/builders/buildifier
+
+      - name: Fix and Format Workspace
+        run: |
+          bazel run @io_bazel_rules_go//go/tools/builders/buildifier -- --lint=fix WORKSPACE
 
       - name: Build Binaries 
         run: |
