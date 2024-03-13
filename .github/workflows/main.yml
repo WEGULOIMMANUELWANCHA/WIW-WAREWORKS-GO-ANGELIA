@@ -64,10 +64,7 @@ jobs:
             }
           }' > script.go
           go run script.go
-
-      - name: Set up Bazel
-        uses: bazel/setup-bazel@v1
-        
+          
       - name: Install Buildifier
         run: |
           bazel run @io_bazel_rules_go//go/tools/builders/buildifier
