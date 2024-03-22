@@ -71,7 +71,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: '1.20.3'
+          go-version: '1.23' # Change the Go version to match the required format
       
       - name: Install buildifier
         run: |
@@ -89,9 +89,13 @@ jobs:
           bazelisk run //:gazelle -- update
           bazelisk run //:gazelle
 
-      - name: Format and Fix Workspace file
+      - name: Format and Fix Workspace file with Buildifier
         run: |
           buildifier --lint=warn --mode=fix WORKSPACE
+      
+      - name: Format and Fix Starlark files with Gazelle
+        run: |
+          bazelisk run //:gazelle --lint=warn --fix WORKSPACE
           
       - name: Build Binaries 
         run: |
